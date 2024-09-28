@@ -129,8 +129,20 @@ function initialize(){
     let styleDisplay=window.getComputedStyle(display);
     let hgt=parseInt(styleDisplay.height.slice(0,styleDisplay.length-2));
     let wdt=parseInt(styleDisplay.width.slice(0,styleDisplay.length-2));
-    input.style.height=hgt+"px";
-    input.style.width=wdt+"px";
+    input.style.height=(hgt-4)+"px";
+    input.style.width=(wdt-6)+"px";
+    //setting color for digits:
+    let nodeDigit=document.querySelectorAll(".number");
+    let nodeDigitArr=Array.from(nodeDigit);
+    for(let node of nodeDigitArr){
+        node.style["background-color"]="gray";
+    }
+    //setting bg for operators
+    let nodeOpr=document.querySelectorAll(".operator");
+    let nodeOprArr=Array.from(nodeOpr);
+    for(let node of nodeOprArr){
+        node.style["background-color"]="orange";
+    }
 }
 
 document.addEventListener("DOMContentLoaded",()=>{initialize()});
