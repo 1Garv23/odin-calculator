@@ -144,6 +144,9 @@ function initialize(){
     for(let node of nodeOprArr){
         node.style["background-color"]="orange";
     }
+    btn_rem.style["background-color"]=btn_ac.style["background-color"];
+    btn_cal.style["background-color"]="orange";
+    btn_dec.style["background-color"]="gray";
     keys.addEventListener("click",(event)=>{handleInput(event)});
 }
 
