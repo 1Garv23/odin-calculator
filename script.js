@@ -79,7 +79,7 @@ function initialize(){
 
     btn_div=document.createElement("button");
     btn_div.classList.add("operator");
-    btn_div.textContent="%";
+    btn_div.textContent="/";
 
 
     //miscellaneous
@@ -185,6 +185,7 @@ function calculate(){
 function updateDislplay(){
     if(!opr2Found){
         input.value=String(operand1);
+        secondary.textContent=0;  //this is only meant for AC to refresh
     }
     else{
         input.value=String(operand2);
