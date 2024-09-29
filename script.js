@@ -2,6 +2,7 @@ let keys=document.querySelector(".keys");
 let input=document.querySelector(".input-box");
 let display=document.querySelector(".display");
 
+
 function initialize(){
     //i could've created arrays of 0,1...9 and then used map method to create corresponding nodes but then
     //i wouldn't be able to place them in order of my choice
@@ -10,6 +11,7 @@ function initialize(){
     let btn_0=document.createElement("button");
     btn_0.classList.add("number");
     btn_0.textContent="0";
+    btn_0.addEventListener("click",(target)=>handleThis(target));
     
     let btn_1=document.createElement("button");
     btn_1.classList.add("number");
@@ -143,6 +145,29 @@ function initialize(){
     for(let node of nodeOprArr){
         node.style["background-color"]="orange";
     }
+    keys.addEventListener("click",(event)=>{handleInput(event)});
+}
+
+let operand1, operand2;
+let opr1Found, opr2Found=0;
+
+function handleThis(target){
+    console.log(target.classList);
+    
+}
+function handleInput(event){
+    let target=event.target;
+    if(target.classList.contains("number")){
+        console.log("hi");
+        
+    }
+    else if(target.classList.contains("operator")){
+        console.log("hello");
+    }
+    else if(target.classList.contains("control")){
+        console.log("hey");
+    }
 }
 
 document.addEventListener("DOMContentLoaded",()=>{initialize()});
+
