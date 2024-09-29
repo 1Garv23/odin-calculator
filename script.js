@@ -90,7 +90,7 @@ function initialize(){
 
     btn_neg=document.createElement("button")
     btn_neg.classList.add("miscl");
-    btn_neg.textContent="+/-";
+    btn_neg.textContent="DEL";
 
 
 
@@ -160,24 +160,20 @@ let operator="";
 function calculate(){
     if(operator==="+"){
         operand1=operand1+operand2;
-        operand2=0;
     }
     else if(operator==="-"){
         operand1=operand1-operand2;
-        operand2=0;
     }
     else if(operator==="*"){
         operand1=operand1*operand2;
-        operand2=0;
     }
     else if(operator==="%"){
         operand1=operand1%operand2;
-        operand2=0;
     }
     else if(operator==="/"){
         operand1=operand1/operand2;
-        operand2=0;
     }
+    operand2=0;
     //handle the decimal limit upto 2 places
     updateDislplay();
     operator="";
@@ -221,6 +217,20 @@ function handleInput(event){
         }
         else if(opr==="=" && opr2Found){
             calculate();
+        }
+    }
+    else if(target.classList.contains("miscl")){
+        if(target.textContent==="DEL"){
+            if(!opr2Found){
+                if(operand1!=0){
+                    operand1=operand1/10-(operand1%10)/10;
+                }
+            }
+            else{
+                if(operand2!=0){
+                    operand2=operand2/10-(operand2%10)/10;
+                }
+            }
         }
     }
     updateDislplay();
