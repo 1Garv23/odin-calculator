@@ -241,13 +241,19 @@ function handleInput(event){
     else if(target.classList.contains("miscl")){
         if(target.textContent==="DEL"){
             if(opr1Input){
-                if(operand1!=0){
+                if(operand1!="0"){
                     operand1=operand1.slice(0,operand1.length-1);
+                }
+                if(operand1===""){
+                    operand1="0";
                 }
             }
             else{
-                if(operand2!=0){
+                if(operand2!="0"){
                     operand2=operand2.slice(0,operand2.length-1);
+                }
+                if(operand2===""){
+                    operand2="0";
                 }
             }
         }
