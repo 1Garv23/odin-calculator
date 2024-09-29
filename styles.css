@@ -16,6 +16,14 @@
     box-sizing: border-box;
     background-color: blanchedalmond;
     flex-grow: 0;
+    display:flex;
+    flex-direction: column;
+}
+.input-box{
+    text-align: center;
+}
+.secondary{
+    text-align: right;
 }
 .keys{
     display:flex;

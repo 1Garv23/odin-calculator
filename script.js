@@ -1,7 +1,7 @@
 let keys=document.querySelector(".keys");
 let input=document.querySelector(".input-box");
 let display=document.querySelector(".display");
-
+let secondary=document.querySelector(".secondary");
 
 function initialize(){
     //i could've created arrays of 0,1...9 and then used map method to create corresponding nodes but then
@@ -131,8 +131,9 @@ function initialize(){
     let styleDisplay=window.getComputedStyle(display);
     let hgt=parseInt(styleDisplay.height.slice(0,styleDisplay.length-2));
     let wdt=parseInt(styleDisplay.width.slice(0,styleDisplay.length-2));
-    input.style.height=(hgt-4)+"px";
+    input.style.height=(hgt-4)*7/10+"px";
     input.style.width=(wdt-6)+"px";
+    secondary.style.height=(hgt-4)*3/10+"px";
     //setting color for digits:
     let nodeDigit=document.querySelectorAll(".number");
     let nodeDigitArr=Array.from(nodeDigit);
@@ -148,25 +149,80 @@ function initialize(){
     keys.addEventListener("click",(event)=>{handleInput(event)});
 }
 
-let operand1, operand2;
-let opr1Found, opr2Found=0;
 
-function handleThis(target){
-    console.log(target.classList);
-    
+let operand1=0;
+let operand2=0;
+let opr1Found=0;
+let opr2Found=0;
+let operator="";
+
+
+function calculate(){
+    if(operator==="+"){
+        operand1=operand1+operand2;
+        operand2=0;
+    }
+    else if(operator==="-"){
+        operand1=operand1-operand2;
+        operand2=0;
+    }
+    else if(operator==="*"){
+        operand1=operand1*operand2;
+        operand2=0;
+    }
+    else if(operator==="%"){
+        operand1=operand1%operand2;
+        operand2=0;
+    }
+    else if(operator==="/"){
+        operand1=operand1/operand2;
+        operand2=0;
+    }
+    //handle the decimal limit upto 2 places
+    updateDislplay();
+    operator="";
+}
+function updateDislplay(){
+    if(!opr2Found){
+        input.value=String(operand1);
+    }
+    else{
+        input.value=String(operand2);
+        secondary.textContent=operand1;
+    }
+    // console.log(input.value);
 }
 function handleInput(event){
     let target=event.target;
     if(target.classList.contains("number")){
-        console.log("hi");
-        
+
+        let digit=parseInt(target.textContent);
+        if(!opr2Found){
+            operand1=operand1*10+digit;
+        }
+        else{
+            operand2=operand2*10+digit;
+        }
     }
     else if(target.classList.contains("operator")){
-        console.log("hello");
+        if(operator!=""){  //calculate the previous one if two operators are stacked
+            calculate();
+        }
+        operator=target.textContent;
+        opr2Found=1;
     }
     else if(target.classList.contains("control")){
-        console.log("hey");
+        let opr=target.textContent;
+        if(opr==="AC"){
+            operand1=0;
+            operand2=0;
+            opr2Found=0;
+        }
+        else if(opr==="=" && opr2Found){
+            calculate();
+        }
     }
+    updateDislplay();
 }
 
 document.addEventListener("DOMContentLoaded",()=>{initialize()});
