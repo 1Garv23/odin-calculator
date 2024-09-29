@@ -11,7 +11,6 @@ function initialize(){
     let btn_0=document.createElement("button");
     btn_0.classList.add("number");
     btn_0.textContent="0";
-    btn_0.addEventListener("click",(target)=>handleThis(target));
     
     let btn_1=document.createElement("button");
     btn_1.classList.add("number");
@@ -87,7 +86,6 @@ function initialize(){
     btn_dec.classList.add("miscl");
     btn_dec.textContent=".";
 
-
     btn_neg=document.createElement("button")
     btn_neg.classList.add("miscl");
     btn_neg.textContent="DEL";
@@ -120,7 +118,7 @@ function initialize(){
     //setting the size of all buttons
     let styles=window.getComputedStyle(keys);
     let h=parseInt(styles.height.slice(0,styles.height.length-2));
-    let w=parseInt(styles.width.slice(0,styles.height.length-2));
+    let w=parseInt(styles.width.slice(0,styles.width.length-2));
 
     for(let node of arr){
         node.style.height=h/5+"px";
@@ -129,11 +127,11 @@ function initialize(){
     btn_0.style.width=w/2+"px";
     //fitting the input-box in display
     let styleDisplay=window.getComputedStyle(display);
-    let hgt=parseInt(styleDisplay.height.slice(0,styleDisplay.length-2));
-    let wdt=parseInt(styleDisplay.width.slice(0,styleDisplay.length-2));
-    input.style.height=(hgt-4)*7/10+"px";
-    input.style.width=(wdt-6)+"px";
-    secondary.style.height=(hgt-4)*3/10+"px";
+    let hgt=parseInt(styleDisplay.height.slice(0,styleDisplay.height.length-2));
+    let wdt=parseInt(styleDisplay.width.slice(0,styleDisplay.width.length-2));
+    input.style.height=(hgt-6)*7/10+"px";
+    input.style.width=(wdt-4)+"px";
+    secondary.style.height=(hgt-6)*3/10+"px";
     //setting color for digits:
     let nodeDigit=document.querySelectorAll(".number");
     let nodeDigitArr=Array.from(nodeDigit);
@@ -150,41 +148,49 @@ function initialize(){
 }
 
 
-let operand1=0;
-let operand2=0;
-let opr1Found=0;
-let opr2Found=0;
+let operand1="0";
+let operand2="0";
+let opr1Input=1;
 let operator="";
+let operand1Decimal=0;
+let operand2Decimal=0;
 
 
+function roundTo2places(a){
+    return Math.round(a*100)/100;
+}
 function calculate(){
     if(operator==="+"){
-        operand1=operand1+operand2;
+        operand1=String(parseFloat(operand1)+parseFloat(operand2));
     }
     else if(operator==="-"){
-        operand1=operand1-operand2;
+        operand1=String(parseFloat(operand1)-parseFloat(operand2));
     }
     else if(operator==="*"){
-        operand1=operand1*operand2;
+        operand1=String(parseFloat(operand1)*parseFloat(operand2));
     }
     else if(operator==="%"){
-        operand1=operand1%operand2;
+        operand1=String(parseFloat(operand1)%parseFloat(operand2));
     }
     else if(operator==="/"){
-        operand1=operand1/operand2;
+        operand1=String(parseFloat(operand1)/parseFloat(operand2));
     }
-    operand2=0;
+    operand2="0";
+    operand2Decimal=0;
+    opr1Input=0; //take input in second operand
     //handle the decimal limit upto 2 places
+    operand1=String(roundTo2places(parseFloat(operand1)));
+
     updateDislplay();
     operator="";
 }
 function updateDislplay(){
-    if(!opr2Found){
-        input.value=String(operand1);
+    if(opr1Input){
+        input.value=operand1;
         secondary.textContent=0;  //this is only meant for AC to refresh
     }
     else{
-        input.value=String(operand2);
+        input.value=operand2;
         secondary.textContent=operand1;
     }
     // console.log(input.value);
@@ -193,12 +199,22 @@ function handleInput(event){
     let target=event.target;
     if(target.classList.contains("number")){
 
-        let digit=parseInt(target.textContent);
-        if(!opr2Found){
-            operand1=operand1*10+digit;
+        let digit=(target.textContent);
+        if(opr1Input){
+            if(operand1==="0"){
+                operand1=digit;
+            }
+            else{
+                operand1=operand1+digit;
+            }
         }
         else{
-            operand2=operand2*10+digit;
+            if(operand2==="0"){
+                operand2=digit;
+            }
+            else{
+                operand2=operand2+digit;
+            }
         }
     }
     else if(target.classList.contains("operator")){
@@ -206,33 +222,46 @@ function handleInput(event){
             calculate();
         }
         operator=target.textContent;
-        opr2Found=1;
+        opr1Input=0;
     }
     else if(target.classList.contains("control")){
         let opr=target.textContent;
         if(opr==="AC"){
-            operand1=0;
-            operand2=0;
-            opr2Found=0;
+            operand1="0";
+            operand2="0";
+            opr1Input=1;
+            operand1Decimal=0;
+            operand2Decimal=0;
         }
-        else if(opr==="=" && opr2Found){
+        else if(opr==="=" && !opr1Input){
             calculate();
+            operator="";
         }
     }
     else if(target.classList.contains("miscl")){
         if(target.textContent==="DEL"){
-            if(!opr2Found){
+            if(opr1Input){
                 if(operand1!=0){
-                    operand1=operand1/10-(operand1%10)/10;
+                    operand1=operand1.slice(0,operand1.length-1);
                 }
             }
             else{
                 if(operand2!=0){
-                    operand2=operand2/10-(operand2%10)/10;
+                    operand2=operand2.slice(0,operand2.length-1);
                 }
             }
         }
+        else if(target.textContent==="."){
+            if(opr1Input && !operand1Decimal){
+                operand1=operand1+".";
+            }
+            else if(!opr1Input && !operand2Decimal){
+                operand2=operand2+".";
+            }
+        }
     }
+    console.log(operand1);
+    console.log(operand2);
     updateDislplay();
 }
 
